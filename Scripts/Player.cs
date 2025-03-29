@@ -5,6 +5,7 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
+    public static Player Instance;
     public event EventHandler<WakingToRunningEventArges> WakingToRunning;
 
     public class WakingToRunningEventArges : EventArgs
@@ -19,6 +20,11 @@ public class Player : MonoBehaviour
 
     private bool isWalking;
     private bool isShiftHold;
+
+    private void Awake()
+    {
+        Instance = this;
+    }
 
     private void Start()
     {
@@ -48,27 +54,43 @@ public class Player : MonoBehaviour
         Vector3 movementDir = new Vector3(inputVector2.x, 0, inputVector2.y);
         float movementDistance = movementSpeed * Time.deltaTime;
 
-        
-
+        float decreaseSpeed = 4;
+        float increaseRunningSpeed = 8;
+        float increaseWalkingSpeed = 6;
         isWalking = movementDir != Vector3.zero;
         if (isWalking)
         {
-            if (isShiftHold  && movementSpeed <= 6)
+            if (!isShiftHold)
             {
-                movementSpeed += Time.deltaTime;
+                float maxWalkingSpeed = 2;
+                if (movementSpeed < maxWalkingSpeed)
+                {
+                    movementSpeed += Time.deltaTime * increaseWalkingSpeed;
+                }
+                else if (movementSpeed >= maxWalkingSpeed)
+                {
+                    movementSpeed -= Time.deltaTime * decreaseSpeed;
+                }
+            }
+            else
+            {
+                float maxRunningSpeed = 6;
+
+                if (movementSpeed <= maxRunningSpeed)
+                {
+                    movementSpeed += Time.deltaTime;
+                }
             }
         }
         else
         {
-            if (movementSpeed >= 1)
+            if (movementSpeed >= 0)
             {
-                float dicreaseMoveSpeed = 2 * Time.deltaTime;
-                movementSpeed -= dicreaseMoveSpeed;
+                movementSpeed -= Time.deltaTime * decreaseSpeed;
             }
         }
-        
-        Debug.Log(movementSpeed);
-        
+
+
         WakingToRunning?.Invoke(this, new WakingToRunningEventArges { playerSpeed = movementSpeed });
         transform.position += movementDir * movementDistance;
 
