@@ -13,6 +13,15 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": true
+                },
+                {
+                    "name": "Shift Speed",
+                    "type": "Button",
+                    "id": "04b9bfd7-7445-4e47-ba12-b646da41d96f",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "Hold",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -70,6 +79,17 @@
                     "action": "Move",
                     "isComposite": false,
                     "isPartOfComposite": true
+                },
+                {
+                    "name": "",
+                    "id": "378f68e9-4dc8-4039-8dc1-e763a01e8764",
+                    "path": "<Keyboard>/shift",
+                    "interactions": "Hold",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Shift Speed",
+                    "isComposite": false,
+                    "isPartOfComposite": false
                 }
             ]
         }
