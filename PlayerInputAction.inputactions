@@ -22,6 +22,15 @@
                     "processors": "",
                     "interactions": "Hold",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "MouseRotation",
+                    "type": "Value",
+                    "id": "16ce256c-b0dc-4a46-97b9-97a436e88689",
+                    "expectedControlType": "Vector2",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
                 }
             ],
             "bindings": [
@@ -88,6 +97,17 @@
                     "processors": "",
                     "groups": "",
                     "action": "Shift Speed",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "d6c2656a-a075-43c9-a436-b24548fdd083",
+                    "path": "<Mouse>/position",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "MouseRotation",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

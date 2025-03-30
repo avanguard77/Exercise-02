@@ -17,6 +17,7 @@ public class Player : MonoBehaviour
     private GameInput gameInput;
 
     [SerializeField] private float movementSpeed = 0f;
+    [SerializeField] private float rotateSpeed = 10f;
 
     private bool isWalking;
     private bool isShiftHold;
@@ -94,7 +95,16 @@ public class Player : MonoBehaviour
         WakingToRunning?.Invoke(this, new WakingToRunningEventArges { playerSpeed = movementSpeed });
         transform.position += movementDir * movementDistance;
 
-        float rotateSpeed = 10f;
-        transform.forward = Vector3.Slerp(transform.forward, movementDir, rotateSpeed * Time.deltaTime);
+
+        bool moveFront = movementDir.x != 0;
+        bool moveForward = movementDir.z >= 0;
+        if (moveFront&&moveForward)
+        {
+            transform.forward = Vector3.Slerp(transform.forward, movementDir, rotateSpeed * Time.deltaTime);
+        }
+        if (moveForward)
+        {
+            transform.forward = Vector3.Slerp(transform.forward, movementDir, rotateSpeed * Time.deltaTime);
+        }
     }
 }

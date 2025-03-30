@@ -44,6 +44,15 @@ public partial class @PlayerInputAction : IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": ""Hold"",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""MouseRotation"",
+                    ""type"": ""Value"",
+                    ""id"": ""16ce256c-b0dc-4a46-97b9-97a436e88689"",
+                    ""expectedControlType"": ""Vector2"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
                 }
             ],
             ""bindings"": [
@@ -112,6 +121,17 @@ public partial class @PlayerInputAction : IInputActionCollection2, IDisposable
                     ""action"": ""Shift Speed"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""d6c2656a-a075-43c9-a436-b24548fdd083"",
+                    ""path"": ""<Mouse>/position"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""MouseRotation"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -122,6 +142,7 @@ public partial class @PlayerInputAction : IInputActionCollection2, IDisposable
         m_Player = asset.FindActionMap("Player", throwIfNotFound: true);
         m_Player_Move = m_Player.FindAction("Move", throwIfNotFound: true);
         m_Player_ShiftSpeed = m_Player.FindAction("Shift Speed", throwIfNotFound: true);
+        m_Player_MouseRotation = m_Player.FindAction("MouseRotation", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -183,12 +204,14 @@ public partial class @PlayerInputAction : IInputActionCollection2, IDisposable
     private IPlayerActions m_PlayerActionsCallbackInterface;
     private readonly InputAction m_Player_Move;
     private readonly InputAction m_Player_ShiftSpeed;
+    private readonly InputAction m_Player_MouseRotation;
     public struct PlayerActions
     {
         private @PlayerInputAction m_Wrapper;
         public PlayerActions(@PlayerInputAction wrapper) { m_Wrapper = wrapper; }
         public InputAction @Move => m_Wrapper.m_Player_Move;
         public InputAction @ShiftSpeed => m_Wrapper.m_Player_ShiftSpeed;
+        public InputAction @MouseRotation => m_Wrapper.m_Player_MouseRotation;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -204,6 +227,9 @@ public partial class @PlayerInputAction : IInputActionCollection2, IDisposable
                 @ShiftSpeed.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnShiftSpeed;
                 @ShiftSpeed.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnShiftSpeed;
                 @ShiftSpeed.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnShiftSpeed;
+                @MouseRotation.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnMouseRotation;
+                @MouseRotation.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnMouseRotation;
+                @MouseRotation.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnMouseRotation;
             }
             m_Wrapper.m_PlayerActionsCallbackInterface = instance;
             if (instance != null)
@@ -214,6 +240,9 @@ public partial class @PlayerInputAction : IInputActionCollection2, IDisposable
                 @ShiftSpeed.started += instance.OnShiftSpeed;
                 @ShiftSpeed.performed += instance.OnShiftSpeed;
                 @ShiftSpeed.canceled += instance.OnShiftSpeed;
+                @MouseRotation.started += instance.OnMouseRotation;
+                @MouseRotation.performed += instance.OnMouseRotation;
+                @MouseRotation.canceled += instance.OnMouseRotation;
             }
         }
     }
@@ -222,5 +251,6 @@ public partial class @PlayerInputAction : IInputActionCollection2, IDisposable
     {
         void OnMove(InputAction.CallbackContext context);
         void OnShiftSpeed(InputAction.CallbackContext context);
+        void OnMouseRotation(InputAction.CallbackContext context);
     }
 }

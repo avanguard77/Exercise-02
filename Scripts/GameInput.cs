@@ -43,4 +43,15 @@ public class GameInput : MonoBehaviour
         input.Normalize();
         return input;
     }
+    public Vector2 GetInputVectorNormalized()
+    {
+        Vector2 input= playerInputAction.Player.MouseRotation.ReadValue<Vector2>();
+        input.Normalize();
+        return input;
+    }
+
+    private void Update()
+    {
+        Debug.Log(GetInputVectorNormalized());
+    }
 }
