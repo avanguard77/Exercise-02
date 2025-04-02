@@ -16,9 +16,17 @@ public class Player : MonoBehaviour
     [Header("Movement Settings")] [SerializeField]
     private GameInput gameInput;
 
+    [SerializeField] private Camera playerCam;
     [SerializeField] private float movementSpeed = 0f;
     [SerializeField] private float rotateSpeed = 10f;
+    [SerializeField] float increaseRunningSpeed = 8;
+    [SerializeField] float increaseWalkingSpeed = 6;
 
+    [Header("Camera Setting")] [SerializeField]
+    Transform CameraTransform;
+    [SerializeField] float decreaseSpeed = 4;
+   
+    
     private bool isWalking;
     private bool isShiftHold;
 
@@ -51,13 +59,15 @@ public class Player : MonoBehaviour
     private void HandleMovement()
     {
         Vector2 inputVector2 = gameInput.GetInputVector2Normalized();
+        gameInput.GetInputMouseNormalized();
 
-        Vector3 movementDir = new Vector3(inputVector2.x, 0, inputVector2.y);
+        Vector3 camForwardXZ = new Vector3(playerCam.transform.forward.x, 0, playerCam.transform.forward.z);
+        Vector3 camRightXZ = new Vector3(playerCam.transform.right.x, 0, playerCam.transform.right.z);
+
+        Vector3 movementDir = camRightXZ * inputVector2.x + camForwardXZ * inputVector2.y;
+
         float movementDistance = movementSpeed * Time.deltaTime;
 
-        float decreaseSpeed = 4;
-        float increaseRunningSpeed = 8;
-        float increaseWalkingSpeed = 6;
         isWalking = movementDir != Vector3.zero;
         if (isWalking)
         {
@@ -90,21 +100,9 @@ public class Player : MonoBehaviour
                 movementSpeed -= Time.deltaTime * decreaseSpeed;
             }
         }
-
-
         WakingToRunning?.Invoke(this, new WakingToRunningEventArges { playerSpeed = movementSpeed });
         transform.position += movementDir * movementDistance;
 
-
-        bool moveFront = movementDir.x != 0;
-        bool moveForward = movementDir.z >= 0;
-        if (moveFront&&moveForward)
-        {
-            transform.forward = Vector3.Slerp(transform.forward, movementDir, rotateSpeed * Time.deltaTime);
-        }
-        if (moveForward)
-        {
-            transform.forward = Vector3.Slerp(transform.forward, movementDir, rotateSpeed * Time.deltaTime);
-        }
+        transform.forward = Vector3.Slerp(transform.forward, movementDir, rotateSpeed * Time.deltaTime);
     }
 }

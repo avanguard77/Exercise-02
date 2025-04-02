@@ -10,7 +10,7 @@ public class GameInput : MonoBehaviour
 
     public event EventHandler ShiftSpeedStart;
     public event EventHandler ShiftSpeedEnd;
-    
+
     private PlayerInputAction playerInputAction;
 
     private void Awake()
@@ -22,14 +22,14 @@ public class GameInput : MonoBehaviour
     {
         playerInputAction = new PlayerInputAction();
         playerInputAction.Enable();
-        
-        playerInputAction.Player.ShiftSpeed.performed+= ShiftSpeedStart_Onperformed;
-        playerInputAction.Player.ShiftSpeed.canceled+= ShiftSpeedEnd_Oncanceled;
+
+        playerInputAction.Player.ShiftSpeed.performed += ShiftSpeedStart_Onperformed;
+        playerInputAction.Player.ShiftSpeed.canceled += ShiftSpeedEnd_Oncanceled;
     }
 
     private void ShiftSpeedEnd_Oncanceled(InputAction.CallbackContext obj)
     {
-        ShiftSpeedEnd?.Invoke(this, EventArgs.Empty);   
+        ShiftSpeedEnd?.Invoke(this, EventArgs.Empty);
     }
 
     private void ShiftSpeedStart_Onperformed(InputAction.CallbackContext obj)
@@ -39,19 +39,15 @@ public class GameInput : MonoBehaviour
 
     public Vector2 GetInputVector2Normalized()
     {
-        Vector2 input= playerInputAction.Player.Move.ReadValue<Vector2>();
-        input.Normalize();
-        return input;
-    }
-    public Vector2 GetInputVectorNormalized()
-    {
-        Vector2 input= playerInputAction.Player.MouseRotation.ReadValue<Vector2>();
+        Vector2 input = playerInputAction.Player.Move.ReadValue<Vector2>();
         input.Normalize();
         return input;
     }
 
-    private void Update()
+    public Vector3 GetInputMouseNormalized()
     {
-        Debug.Log(GetInputVectorNormalized());
+        Vector2 input = playerInputAction.Player.MouseRotation.ReadValue<Vector2>();
+        Debug.Log(input);
+        return input.normalized;
     }
 }
